@@ -66,33 +66,27 @@ public final class NIO {
         }
     }
 
-    public static void replaceWord(File file, String original, String newWord){
+    public static void replaceWord(File file, String original, String newWord) throws IOException {
 
         //create a temp file
-        File temp = null;
-        try {
-            temp = File.createTempFile("prefix",".tmp");
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-        if (temp != null){
-            try(BufferedReader br = new BufferedReader(new FileReader(file));BufferedWriter bw = new BufferedWriter(new FileWriter(temp))) {
+        File temp = File.createTempFile("prefix", ".tmp");
+
+        if (temp != null) {
+            try (BufferedReader br = new BufferedReader(new FileReader(file)); BufferedWriter bw = new BufferedWriter(new FileWriter(temp))) {
                 String line = br.readLine();
-                while (line != null){
-                    bw.write(line.replaceAll(original,newWord));
+                while (line != null) {
+                    bw.write(line.replaceAll(original, newWord));
                     bw.newLine();
                     line = br.readLine();
                 }
 
-            }catch (IOException e){
+            } catch (IOException e) {
                 e.printStackTrace();
             }
-            try {
-                Files.move(Paths.get(temp.getPath()),Paths.get(file.getPath()), StandardCopyOption.REPLACE_EXISTING);
-            }catch (IOException e){
-                e.printStackTrace();
-            }
-        }else {
+
+            Files.move(Paths.get(temp.getPath()), Paths.get(file.getPath()), StandardCopyOption.REPLACE_EXISTING);
+
+        } else {
             System.out.println("The creation of temporary file was not successful!");
         }
     }

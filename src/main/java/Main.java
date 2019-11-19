@@ -1,6 +1,7 @@
 import files.NIO;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Paths;
 
 public class Main {
@@ -29,7 +30,11 @@ public class Main {
        // NIO.printFileContent(file);
 
         // #8 -> - prepísať slovo v súbore na iné
-        NIO.replaceWord(file,"teoria","TeOrIa");
+        try{
+            NIO.replaceWord(file,"TeOrIa","TeOrIaVeLkA");
+        }catch (IOException e){
+            e.printStackTrace();
+        }
         NIO.printFileContent(file);
 
     }
