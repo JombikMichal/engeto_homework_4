@@ -68,7 +68,7 @@ public final class NIO {
 
     public static void replaceWord(File file, String original, String newWord){
         try(BufferedReader br = new BufferedReader(new FileReader(file))) {
-            
+
             //create a temp file
             File temp = File.createTempFile("prefix",".tmp");
 

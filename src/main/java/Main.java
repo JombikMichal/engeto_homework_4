@@ -1,8 +1,6 @@
-import files.MyFile;
 import files.NIO;
 
 import java.io.File;
-import java.net.URL;
 import java.nio.file.Paths;
 
 public class Main {
