@@ -67,35 +67,24 @@ public final class NIO {
     }
 
     public static void replaceWord(File file, String original, String newWord){
+        try(BufferedReader br = new BufferedReader(new FileReader(file))) {
+            
+            //create a temp file
+            File temp = File.createTempFile("prefix",".tmp");
 
-//        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-//
-//            File tempFile = File.createTempFile("prefix", ".tmp");
-//            tempFile.deleteOnExit();
-//
-//            BufferedWriter bw = new BufferedWriter(new FileWriter(tempFile));
-//
-//            String line = br.readLine();
-//            while (line != null) {
-//                bw.write(line + " prd ");
-//                line = br.readLine();
-//            }
-//            Files.move(Paths.get(tempFile.getPath()),Paths.get(file.getPath()), StandardCopyOption.REPLACE_EXISTING);
-//            System.out.println(file.getName());
-//            System.out.println(tempFile.getName());
-//
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-        try {
-            File file1 = File.createTempFile("prefix",".tmp");
-            PrintWriter pw = new PrintWriter(new FileWriter(file1,true));
-            pw.write("example");
-            BufferedReader br = new BufferedReader(new FileReader(file1));
-            System.out.println(br.readLine());
+            //write it
+            BufferedWriter bw = new BufferedWriter(new FileWriter(temp));
 
-        }catch (Exception e){
+            String line = br.readLine();
+            while (line != null){
+                bw.write(line.replaceAll(original,newWord));
+                bw.newLine();
+                line = br.readLine();
+            }
+            bw.close();
+            Files.move(Paths.get(temp.getPath()),Paths.get(file.getPath()), StandardCopyOption.REPLACE_EXISTING);
+
+        }catch (IOException e){
             e.printStackTrace();
         }
     }
