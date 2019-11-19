@@ -83,9 +83,12 @@ public final class NIO {
                     bw.newLine();
                     line = br.readLine();
                 }
-                bw.close();
-                Files.move(Paths.get(temp.getPath()),Paths.get(file.getPath()), StandardCopyOption.REPLACE_EXISTING);
 
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+            try {
+                Files.move(Paths.get(temp.getPath()),Paths.get(file.getPath()), StandardCopyOption.REPLACE_EXISTING);
             }catch (IOException e){
                 e.printStackTrace();
             }
