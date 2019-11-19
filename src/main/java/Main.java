@@ -15,7 +15,7 @@ public class Main {
         System.out.println("2. Relative path: " + NIO.existFile(Paths.get("./files/repository/original")));
 
         // #3 -> - napíšte program, ktorý zistí, či daná cesta je adresár alebo súbor
-        //System.out.println("#3 -> Type: " + NIO.pathType(file));
+        System.out.println("#3 -> Type: " + NIO.pathType(file));
 
         // #4 -> - napíšte program, ktorý zmaže určitý súbor
         //NIO.deleteFile(file2);
@@ -30,12 +30,27 @@ public class Main {
        // NIO.printFileContent(file);
 
         // #8 -> - prepísať slovo v súbore na iné
+//        try{
+//            NIO.replaceWord(file,"TeOrIa","TeOrIaVeLkA");
+//        }catch (IOException e){
+//            e.printStackTrace();
+//        }
+//        NIO.printFileContent(file);
+
         try{
-            NIO.replaceWord(file,"TeOrIa","TeOrIaVeLkA");
+            NIO.encode(file,'c');
         }catch (IOException e){
             e.printStackTrace();
         }
         NIO.printFileContent(file);
 
+        try{
+            NIO.decode(file,'c');
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+        NIO.printFileContent(file);
+
+        // #10 - napíšte program, ktorý zakóduje a dekóduje daný program pomocou Caesarovej šifry
     }
 }

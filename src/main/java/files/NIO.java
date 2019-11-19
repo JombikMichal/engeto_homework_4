@@ -1,5 +1,7 @@
 package files;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -66,29 +68,58 @@ public final class NIO {
         }
     }
 
-    public static void replaceWord(File file, String original, String newWord) throws IOException {
+    public static void replaceWord(@NotNull File file, @NotNull String regex, @NotNull String replacement) throws IOException {
+        //create a temp file
+        File temp = File.createTempFile("prefix", ".tmp");
+
+        try (BufferedReader br = new BufferedReader(new FileReader(file)); BufferedWriter bw = new BufferedWriter(new FileWriter(temp))) {
+            String line = br.readLine();
+            while (line != null) {
+                bw.write(line.replaceAll(regex, replacement));
+                bw.newLine();
+                line = br.readLine();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Files.move(Paths.get(temp.getPath()), Paths.get(file.getPath()), StandardCopyOption.REPLACE_EXISTING);
+    }
+
+    private static void caesarCipher(File file, int shift) throws IOException {
 
         //create a temp file
         File temp = File.createTempFile("prefix", ".tmp");
 
-        if (temp != null) {
-            try (BufferedReader br = new BufferedReader(new FileReader(file)); BufferedWriter bw = new BufferedWriter(new FileWriter(temp))) {
-                String line = br.readLine();
-                while (line != null) {
-                    bw.write(line.replaceAll(original, newWord));
-                    bw.newLine();
-                    line = br.readLine();
+        try (BufferedReader br = new BufferedReader(new FileReader(file)); BufferedWriter bw = new BufferedWriter(new FileWriter(temp))) {
+            char[] arr = null;
+            String line = br.readLine();
+            while (line != null) {
+                arr = line.toCharArray();
+                for (int i = 0; i < arr.length; i++) {
+                    if (Character.isUpperCase(arr[i])) {
+                        arr[i] = (char) (((int) arr[i] + shift - 65) % 26 + 65);
+                    } else {
+                        arr[i] = (char) (((int) arr[i] + shift - 97) % 26 + 97);
+                    }
                 }
-
-            } catch (IOException e) {
-                e.printStackTrace();
+                bw.write(String.valueOf(arr));
+                bw.newLine();
+                line = br.readLine();
             }
 
-            Files.move(Paths.get(temp.getPath()), Paths.get(file.getPath()), StandardCopyOption.REPLACE_EXISTING);
-
-        } else {
-            System.out.println("The creation of temporary file was not successful!");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
+        Files.move(Paths.get(temp.getPath()), Paths.get(file.getPath()), StandardCopyOption.REPLACE_EXISTING);
+    }
+
+    public static void encode(File file, char shift) throws IOException {
+        caesarCipher(file, Character.getNumericValue(shift));
+    }
+
+    public static void decode(File file, char shift) throws IOException {
+        caesarCipher(file, (Character.getNumericValue(shift) * -1));
     }
 
 
