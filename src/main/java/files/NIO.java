@@ -67,25 +67,30 @@ public final class NIO {
     }
 
     public static void replaceWord(File file, String original, String newWord){
-        try(BufferedReader br = new BufferedReader(new FileReader(file))) {
 
-            //create a temp file
-            File temp = File.createTempFile("prefix",".tmp");
-
-            //write it
-            BufferedWriter bw = new BufferedWriter(new FileWriter(temp));
-
-            String line = br.readLine();
-            while (line != null){
-                bw.write(line.replaceAll(original,newWord));
-                bw.newLine();
-                line = br.readLine();
-            }
-            bw.close();
-            Files.move(Paths.get(temp.getPath()),Paths.get(file.getPath()), StandardCopyOption.REPLACE_EXISTING);
-
+        //create a temp file
+        File temp = null;
+        try {
+            temp = File.createTempFile("prefix",".tmp");
         }catch (IOException e){
             e.printStackTrace();
+        }
+        if (temp != null){
+            try(BufferedReader br = new BufferedReader(new FileReader(file));BufferedWriter bw = new BufferedWriter(new FileWriter(temp))) {
+                String line = br.readLine();
+                while (line != null){
+                    bw.write(line.replaceAll(original,newWord));
+                    bw.newLine();
+                    line = br.readLine();
+                }
+                bw.close();
+                Files.move(Paths.get(temp.getPath()),Paths.get(file.getPath()), StandardCopyOption.REPLACE_EXISTING);
+
+            }catch (IOException e){
+                e.printStackTrace();
+            }
+        }else {
+            System.out.println("The creation of temporary file was not successful!");
         }
     }
 

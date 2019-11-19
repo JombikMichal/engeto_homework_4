@@ -20,7 +20,7 @@ public class Main {
         //NIO.deleteFile(file2);
 
         // #5 -> - prečítať obsah súboru a vypísať na konzolu - BufferedReader
-        //NIO.printFileContent(file);
+        NIO.printFileContent(file);
 
         // #6 -> - napíšte program, ktorý spočíta počet riadkov v danom súbore
 
@@ -29,8 +29,8 @@ public class Main {
        // NIO.printFileContent(file);
 
         // #8 -> - prepísať slovo v súbore na iné
-        NIO.replaceWord(file,"ako","akoo");
-      //  NIO.printFileContent(file);
+        NIO.replaceWord(file,"teoria","TeOrIa");
+        NIO.printFileContent(file);
 
     }
 }
